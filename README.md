@@ -1,29 +1,29 @@
-# Docker Fabric Server
+# Docker Minecraft Server
 
-A simple docker image to run a fabric minecraft server
-Automatically downloads the minecraft server jar from fabric's website and runs it.
-You can mount `/mc/server` as a volume to your host machine to persist data across contaner launches.
+A simple docker image to run a minecraft server in a docker container.
+Automatically downloads the minecraft server jar from the desired link and runs it.
+You can mount `/mc/server` as a volume to your host machine to persist data across container launches.
 
 
 ## Building and running
 
 ```bash
-git clone git@github.com:DarthChungo/docker-fabric-server.git
-cd docker-fabric-server
+git clone git@github.com:DarthChungo/docker-minecraft-server.git
+cd docker-minecraft-server
 ```
 
 ```bash
-docker build -t docker-fabric-server .
+docker build -t docker-minecraft-server .
 ```
 
 ```bash
-docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server docker-fabric-server
+docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server docker-minecraft-server
 ```
 
 
 # License
 
-docker-fabric-server, a simple docker image to run a minecraft fabric server 
+Docker Minecraft Server, a simple docker image to run a minecraft fabric server 
 
 Copyright © 2023 Antonio de Haro
 
