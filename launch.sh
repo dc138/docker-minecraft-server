@@ -2,7 +2,7 @@
 
 cd /mc/server/
 
-[ ! -f "config.cfg" ] && mv ../def_config.cfg config.cfg
+[ ! -f "config.cfg" ] && cp ../def_config.cfg config.cfg
 . config.cfg
 
 [ ! -f "server-$MC_NAME-$MC_VER.jar" ] && wget $SRV_URL -O "server-$MC_NAME-$MC_VER.jar"
