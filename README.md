@@ -2,7 +2,7 @@
 
 A simple docker image to run a minecraft server in a docker container.
 Automatically downloads the minecraft server jar from the desired link and runs it.
-You can mount `/mc/server` as a volume to your host machine to persist data across container launches.
+You can mount `/mc/server` as a volume in your host machine to persist data across container launches.
 
 
 ## Building the image
