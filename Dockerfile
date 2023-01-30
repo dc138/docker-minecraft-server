@@ -1,13 +1,12 @@
 FROM eclipse-temurin:17-jre-alpine
 
+VOLUME /mc/server
 WORKDIR /mc
 
-RUN mkdir server
 COPY launch.sh .
 COPY start.sh .
-COPY config.cfg .
-EXPOSE 25565
+COPY def_config.cfg .
 
-VOLUME /mc/server
+EXPOSE 25565
 
 ENTRYPOINT ["/bin/sh", "launch.sh"]

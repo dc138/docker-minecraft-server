@@ -1,12 +1,12 @@
 #!/bin/sh
 
-cd /mc/
-mv config.cfg server/config.cfg
-
 cd /mc/server/
+
+[ ! -f "config.cfg" ] && mv ../def_config.cfg config.cfg
 . config.cfg
 
 [ ! -f "server-$MC_NAME-$MC_VER.jar" ] && wget $SRV_URL -O "server-$MC_NAME-$MC_VER.jar"
+
 echo "eula=true" > eula.txt
 
 cd /mc/
