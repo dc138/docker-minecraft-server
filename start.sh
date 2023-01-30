@@ -1,5 +1,6 @@
 #!/bin/sh
 
 cd /mc/server/
+. config.cfg
 
-java -jar fabric.jar nogui
+java $JVM_FLAGS -jar server.jar nogui
