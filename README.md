@@ -5,7 +5,9 @@ Automatically downloads the minecraft server jar from the desired link and runs 
 You can mount `/mc/server` as a volume to your host machine to persist data across container launches.
 
 
-## Building and running
+## Building the image
+
+### From source
 
 ```bash
 git clone git@github.com:DarthChungo/docker-minecraft-server.git
@@ -13,17 +15,30 @@ cd docker-minecraft-server
 ```
 
 ```bash
-docker build -t docker-minecraft-server .
+docker build -t darthchungo/docker-minecraft-server:latest .
 ```
 
+### From docker hub
+
+Alternatively, you can download a prebuilt image from docker hub:
+
 ```bash
-docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server docker-minecraft-server
+docker pull darthchungo/docker-minecraft-server:latest
+```
+
+
+## Running the image
+
+Now create a directory to store the server data, like `data`, and run the container:
+
+```bash
+docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server darthchungo/docker-minecraft-server:latest
 ```
 
 
 # License
 
-Docker Minecraft Server, a simple docker image to run a minecraft fabric server 
+Docker Minecraft Server, a simple docker image to run a minecraft server
 
 Copyright © 2023 Antonio de Haro
 
