@@ -1,7 +1,7 @@
 # Docker Minecraft Server
 
 A simple docker image to run a minecraft server in a docker container.
-Automatically downloads the minecraft server jar from the desired link and runs it.
+Comes embedded with the desired minecraft server image and a RCON client to easily run commands inside the container.
 You can mount `/mc/server` as a volume in your host machine to persist data across container launches.
 
 
@@ -15,7 +15,7 @@ cd docker-minecraft-server
 ```
 
 ```bash
-docker build -t darthchungo/docker-minecraft-server:latest .
+docker build -t darthchungo/docker-minecraft-server:fabric-1.19.3 .
 ```
 
 ### From docker hub
@@ -23,7 +23,7 @@ docker build -t darthchungo/docker-minecraft-server:latest .
 Alternatively, you can download a prebuilt image from docker hub:
 
 ```bash
-docker pull darthchungo/docker-minecraft-server:latest
+docker pull darthchungo/docker-minecraft-server:fabric-1.19.3
 ```
 
 
@@ -32,9 +32,21 @@ docker pull darthchungo/docker-minecraft-server:latest
 Now create a directory to store the server data, like `data`, and run the container:
 
 ```bash
-docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server darthchungo/docker-minecraft-server:latest
+docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server darthchungo/docker-minecraft-server:fabric-1.19.3
 ```
 
+
+## Running commands
+
+To run a command inside the container, use:
+
+```bash
+docker exec -it <container_id> cmd <command>
+```
+
+Where `<container_id>` is the docker container id (use `docker container ls`), and `<command>` is the command.
+If `<command>` is left empty, it will drop you into an interactive shell.
+You may also choose to modify the image to expose port `25575` and connect to it through RCON directly with the default password, `rconpass`.
 
 # License
 
