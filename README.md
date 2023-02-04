@@ -48,6 +48,14 @@ Where `<container_id>` is the docker container id (use `docker container ls`), a
 If `<command>` is left empty, it will drop you into an interactive shell, provided you keey the `-it` flags.
 You may also choose to modify the image to expose port `25575` and connect to it through RCON directly with the default password, `rconpass`.
 
+
+## Modifying the image
+
+Configuration is handled with two files, `build_config.cfg` and `runtime_config.cfg`.
+The former contains configuration to be used while builing the image, like the server jar to embed.
+The latter contains runtime configuration used while launching the server, and is copied to `/mc/server` when the container starts to persist changes.
+
+
 # License
 
 Docker Minecraft Server, a simple docker image to run a minecraft server.
