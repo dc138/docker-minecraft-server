@@ -45,12 +45,12 @@ docker exec -it <container_id> cmd <command>
 ```
 
 Where `<container_id>` is the docker container id (use `docker container ls`), and `<command>` is the command.
-If `<command>` is left empty, it will drop you into an interactive shell.
+If `<command>` is left empty, it will drop you into an interactive shell, provided you keey the `-it` flags.
 You may also choose to modify the image to expose port `25575` and connect to it through RCON directly with the default password, `rconpass`.
 
 # License
 
-Docker Minecraft Server, a simple docker image to run a minecraft server
+Docker Minecraft Server, a simple docker image to run a minecraft server.
 
 Copyright © 2023 Antonio de Haro
 
