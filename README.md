@@ -53,7 +53,7 @@ You may also choose to modify the image to expose port `25575` and connect to it
 
 Configuration is handled with two files, `build_config.cfg` and `runtime_config.cfg`.
 The former contains configuration to be used while builing the image, like the server jar to embed.
-The latter contains runtime configuration used while launching the server, and is copied to `/mc/server` when the container starts to persist changes.
+The latter contains runtime configuration used while launching the server, and is stored in `/mc/server` to persist changes.
 
 
 # License
