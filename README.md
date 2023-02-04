@@ -1,7 +1,7 @@
 # Docker Minecraft Server
 
 A simple docker image to run a minecraft server in a docker container.
-Comes embedded with the desired minecraft server image and a RCON client to easily run commands inside the container.
+Downloads the desired minecraft version on startup and automatically launches it.
 You can mount `/mc/server` as a volume in your host machine to persist data across container launches.
 
 
@@ -51,9 +51,8 @@ You may also choose to modify the image to expose port `25575` and connect to it
 
 ## Modifying the image
 
-Configuration is handled with two files, `build_config.cfg` and `runtime_config.cfg`.
-The former contains configuration to be used while builing the image, like the server jar to embed.
-The latter contains runtime configuration used while launching the server, and is stored in `/mc/server` to persist changes.
+Configuration is handled within `/mc/server/config.cfg`, which contains settings like the server jar to use, and JVM flags to use.
+The default config can be found in the `config.cfg` file.
 
 
 # License

@@ -2,8 +2,8 @@
 
 cd /mc/
 
-[ ! -f "server/config.cfg" ] && cp runtime_config.cfg server/config.cfg
-[ ! -f "server/server.jar" ] && cp def_server.jar server/server.jar
+[ ! -f "server/config.cfg" ] && mv config.cfg server/config.cfg || rm config.cfg
+. server/config.cfg
 
 if [ ! -f "server/server.properties" ]; then
   echo "enable-rcon=true" > server/server.properties
@@ -11,5 +11,7 @@ if [ ! -f "server/server.properties" ]; then
 fi
 
 echo "eula=true" > server/eula.txt
+
+wget $SERVER_URL -O server/server.jar
 
 /bin/sh start.sh
