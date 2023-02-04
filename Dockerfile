@@ -5,7 +5,7 @@ WORKDIR /mc
 
 COPY entry.sh .
 COPY start.sh .
-COPY def_config.cfg .
+COPY runtime_config.cfg .
 COPY cmd.sh .
 RUN chmod +x cmd.sh
 
