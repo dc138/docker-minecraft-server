@@ -45,7 +45,7 @@ docker exec -it <container_id> cmd <command>
 ```
 
 Where `<container_id>` is the docker container id (use `docker container ls`), and `<command>` is the command.
-If `<command>` is left empty, it will drop you into an interactive shell, provided you keey the `-it` flags.
+If `<command>` is left empty, it will drop you into an interactive shell, provided you keep the `-it` flags.
 You may also choose to modify the image to expose port `25575` and connect to it through RCON directly with the default password, `rconpass`.
 
 
