@@ -67,7 +67,11 @@ if [ ! -f "server/server.properties" ]; then
   echo "rcon.password=rconpass" >> server/server.properties
 fi
 
-echo "eula=true" > server/eula.txt
+if [ "$EULA" = "true" ] || [ "$EULA" = "TRUE" ]; then
+  echo "eula=true" > server/eula.txt
+else
+  echo "eula=false" > server/eula.txt
+fi
 
 if [ ! -z $CUSTOM_SERVER_URL ]; then
   url=$CUSTOM_SERVER_URL
