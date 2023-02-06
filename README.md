@@ -54,9 +54,19 @@ You may also choose to modify the image to expose port `25575` and connect to it
 Configuration is handled through the docker environment.
 Currently used arguments:
 - `SERVER_TYPE`: server flavour, use `vanilla`, `fabric` or `forge`
-- `SERVER_VERSION`: server version, `1.19.3`, ...
-- `SERVER_CUSTOM_URL`: a custom URL to download the server from. Ignored if left empty
+- `SERVER_VERSION`: available options vary depending on flavour:
+  - `vanilla` and `fabric`:
+    - `latest`: for latest release
+    - `latest-snapshot`: for latest snapshot
+    - `<version_number>`: for a specific version number (including snapshots)
+  - `forge`:
+    - `latest`: for latest published forge version
+    - `latest-recommended`: for latest recommended forge version
+    - `<version_number>-latest`: latest forge version for a certain minecraft version
+    - `<version_number>-recommended` or `<version_number>`: latest recommended forge version for a certain minecraft version
+- `SERVER_CUSTOM_URL`: a custom URL to download the server from. Bypasses `SERVER_VERSION` if used. Remember to set `SERVER_VERSION` when using this option regardless, as it is used when invoking the server (use `vanilla` for a typical jar file).
 
+_Note: forge does not provide snapshot builds._
 
 # License
 
