@@ -5,7 +5,7 @@ VOLUME /mc/server
 WORKDIR /mc
 
 ENV SERVER_TYPE="vanilla"
-ENV SERVER_VERSION="1.19.3"
+ENV SERVER_VERSION="latest"
 ENV SERVER_CUSTOM_URL=""
 
 COPY entry.sh .
