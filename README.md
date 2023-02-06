@@ -65,6 +65,7 @@ Currently used arguments:
     - `<version_number>-latest`: latest forge version for a certain minecraft version
     - `<version_number>-recommended` or `<version_number>`: latest recommended forge version for a certain minecraft version
 - `SERVER_CUSTOM_URL`: a custom URL to download the server from. Bypasses `SERVER_VERSION` if used. Remember to set `SERVER_VERSION` when using this option regardless, as it is used when invoking the server (use `vanilla` for a typical jar file).
+- `EULA`: `true` or `TRUE` to agree. Server will not start unless set.
 
 _Note: forge does not provide snapshot builds._
 
