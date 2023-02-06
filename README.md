@@ -15,7 +15,7 @@ cd docker-minecraft-server
 ```
 
 ```bash
-docker build -t darthchungo/docker-minecraft-server:fabric-1.19.3 .
+docker build -t darthchungo/docker-minecraft-server:latest .
 ```
 
 ### From docker hub
@@ -23,7 +23,7 @@ docker build -t darthchungo/docker-minecraft-server:fabric-1.19.3 .
 Alternatively, you can download a prebuilt image from docker hub:
 
 ```bash
-docker pull darthchungo/docker-minecraft-server:fabric-1.19.3
+docker pull darthchungo/docker-minecraft-server:latest
 ```
 
 
@@ -32,7 +32,7 @@ docker pull darthchungo/docker-minecraft-server:fabric-1.19.3
 Now create a directory to store the server data, like `data`, and run the container:
 
 ```bash
-docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server darthchungo/docker-minecraft-server:fabric-1.19.3
+docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server darthchungo/docker-minecraft-server:latest
 ```
 
 
@@ -49,10 +49,13 @@ If `<command>` is left empty, it will drop you into an interactive shell, provid
 You may also choose to modify the image to expose port `25575` and connect to it through RCON directly with the default password, `rconpass`.
 
 
-## Modifying the image
+## Configuration
 
-Configuration is handled within `/mc/server/config.cfg`, which contains settings like the server jar to use, and JVM flags to use.
-The default config can be found in the `config.cfg` file.
+Configuration is handled through the docker environment.
+Currently used arguments:
+- `SERVER_TYPE`: server flavour, use `vanilla`, `fabric` or `forge`
+- `SERVER_VERSION`: server version, `1.19.3`, ...
+- `SERVER_CUSTOM_URL`: a custom URL to download the server from. Ignored if left empty
 
 
 # License
