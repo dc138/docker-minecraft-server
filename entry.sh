@@ -29,9 +29,9 @@ fi
 
 echo "eula=true" > server/eula.txt
 
-if [ ! -z $SERVER_URL ]; then
-  $url=$SERVER_URL
-  echo Using \"$SERVER_URL\" as custom server url
+if [ ! -z $CUSTOM_SERVER_URL ]; then
+  url=$CUSTOM_SERVER_URL
+  echo Using \"$CUSTOM_SERVER_URL\" as custom server url
 else
   url=$(get_download_url $SERVER_TYPE $SERVER_VERSION)
   echo Using \"$url\" as $SERVER_TYPE server url
