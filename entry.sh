@@ -22,9 +22,6 @@ get_download_url() {
 cd /mc/
 echo "Copying files..."
 
-[ ! -f "server/config.cfg" ] && mv config.cfg server/config.cfg || rm config.cfg
-. server/config.cfg
-
 if [ ! -f "server/server.properties" ]; then
   echo "enable-rcon=true" > server/server.properties
   echo "rcon.password=rconpass" >> server/server.properties
@@ -61,4 +58,3 @@ else
 fi
 
 /bin/sh start.sh
-#/bin/sh -i
