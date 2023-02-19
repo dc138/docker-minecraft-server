@@ -4,6 +4,9 @@
 # $2: minecraft version ("1.19.3", ...)
 get_download_url() {
   case $1 in
+    "spigot")
+      echo "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar";;
+
     "vanilla")
       if [ "$2" = "latest" ]; then
         version_=$(wget "https://launchermeta.mojang.com/mc/game/version_manifest.json" -O- | jq -r ".latest.release")
@@ -81,24 +84,45 @@ else
   echo Using \"$url\" as $SERVER_TYPE server url
 fi
 
-if [ ! "$SERVER_TYPE" = "forge" ]; then
-  echo Downloading server...
-  wget -q $url -O server/server.jar
+rm -rv /mc/server/libraries
+rm -rv /mc/server/server.jar
 
-else
-  echo Unpacking server jar and config...
+if [ "$SERVER_TYPE" = "spigot" ]; then
+  echo Compiling spigot server from source, this may take a while...
+  tmp=$(mktemp -d)
+  cd $tmp
+
+  wget -q $url -O build_tools.jar
+  java -jar build_tools.jar --rev $SERVER_VERSION --compile SPIGOT
+
+  if [ -f spigot-*.jar ]; then
+    cp -v spigot-*.jar /mc/server/server.jar
+
+  else
+    echo Builds tools didnt produce a server jar, aborting...
+    exit
+  fi
+
+  cd /mc/
+  rm -rv $tmp
+
+elif [ "$SERVER_TYPE" = "forge" ]; then
+  echo Unpacking forge server jar and config, this may take a while...
   tmp=$(mktemp -d)
   cd $tmp
 
   wget -q $url -O installer.jar
   java -jar installer.jar --installServer
 
-  rm -rv /mc/server/libraries
-  rm -rv /mc/server/server.jar
+  rm /mc/server/server.jar
   cp -rv libraries/ /mc/server
 
   cd /mc/
   rm -rv $tmp
+
+else
+  echo Downloading server...
+  wget -q $url -O server/server.jar
 fi
 
 /bin/sh start.sh

@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jre-alpine
-RUN apk add jq
+RUN apk add jq git
 
 VOLUME /mc/server
 WORKDIR /mc
@@ -7,6 +7,7 @@ WORKDIR /mc
 ENV SERVER_TYPE="vanilla"
 ENV SERVER_VERSION="latest"
 ENV SERVER_CUSTOM_URL=""
+ENV EULA="false"
 
 COPY entry.sh .
 COPY start.sh .
