@@ -171,6 +171,16 @@ else
   fi
 fi
 
-echo $tag > server/tag.txt
+cd /mc/server/
+echo $tag > tag.txt
 
-/bin/sh start.sh
+while true; do
+  if [ "$flavour" = "forge" ]; then
+    java $JVM_FLAGS $(cat libraries/net/minecraftforge/forge/*/unix_args.txt)
+
+  else
+    java $JVM_FLAGS -jar server.jar nogui
+  fi
+
+  [ "$KEEP_ALIVE" = "true" ] || [ "$KEEP_ALIVE" = "TRUE" ] || break
+done

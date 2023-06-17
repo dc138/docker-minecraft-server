@@ -35,7 +35,7 @@ docker pull darthchungo/docker-minecraft-server:latest
 Now create a directory to store the server data, like `data/`, for example, and run the container:
 
 ```bash
-docker run -d -p 25565:25565 -v $(pwd)/data:/mc/server darthchungo/docker-minecraft-server:latest
+docker run -d -e "EULA=true" -p 25565:25565 -v $(pwd)/data:/mc/server darthchungo/docker-minecraft-server:latest
 ```
 
 The first time you run it, it will download the specified server jar automatically, and store its version and flavour inside a `tag.txt` file.
@@ -62,6 +62,7 @@ Currently used arguments:
     - `<version_number>-recommended` or `<version_number>`: latest recommended forge version for a certain minecraft version
 - `SERVER_CUSTOM_URL`: a custom URL to download the server from. Bypasses `SERVER_VERSION` if used. Remember to set `SERVER_VERSION` when using this option regardless, as it is used when invoking the server (use `vanilla` for a typical jar file).
 - `EULA`: `true` or `TRUE` to agree. Server will not start unless set.
+- `KEEP_ALIVE`: set to `true` to automatically reboot the server on a crash.
 
 *Note: flavours marked with*
 _*_
