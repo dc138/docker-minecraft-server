@@ -10,7 +10,7 @@ get_version_info() {
   case $1 in
     "spigot")
       if [ "$2" = "latest" ]; then
-        version=$(wget -q "https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/maven-metadata.xml" -O- | yq -pxml -r ".metadata.versioning.latest" | cut -d- -f1)
+        version=$(wget -q "https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/maven-metadata.xml" -O- | yq -pxml ".metadata.versioning.latest" | cut -d- -f1)
 
       elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?"); then
         version=$2
@@ -84,6 +84,7 @@ fi
 
 if [ "$EULA" = "true" ] || [ "$EULA" = "TRUE" ]; then
   echo "eula=true" > server/eula.txt
+
 else
   echo "eula=false" > server/eula.txt
 fi
@@ -92,55 +93,66 @@ if [ ! -z $CUSTOM_SERVER_URL ]; then
   url=$CUSTOM_SERVER_URL
   version="custom"
   flavour="custom"
+
   echo Using \"$CUSTOM_SERVER_URL\" as custom server url
+
 else
   get_version_info $SERVER_TYPE $SERVER_VERSION
   flavour=$SERVER_TYPE
+
   echo Using \"$url\" as $SERVER_TYPE server url
 fi
 
-#echo "$url $version $flavour"
-#exit
+tag="$url $version $flavour"
 
-rm -rv /mc/server/libraries
-rm -rv /mc/server/server.jar
-
-if [ "$flavour" = "spigot" ]; then
-  echo Compiling spigot server from source, this may take a while...
-  tmp=$(mktemp -d)
-  cd $tmp
-
-  wget -q $url -O build_tools.jar
-  java -jar build_tools.jar --rev $flavour --compile SPIGOT
-
-  if [ -f spigot-*.jar ]; then
-    cp -v spigot-*.jar /mc/server/server.jar
-
-  else
-    echo Builds tools didnt produce a server jar, aborting...
-    exit
-  fi
-
-  cd /mc/
-  rm -rv $tmp
-
-elif [ "$flavour" = "forge" ]; then
-  echo Unpacking forge server jar and config, this may take a while...
-  tmp=$(mktemp -d)
-  cd $tmp
-
-  wget -q $url -O installer.jar
-  java -jar installer.jar --installServer
-
-  rm /mc/server/server.jar
-  cp -rv libraries/ /mc/server
-
-  cd /mc/
-  rm -rv $tmp
+if [ -e server/tag.txt ] && [ -e server/server.jar ] && grep -q "$tag" server/tag.txt; then
+  echo "Using existing server"
 
 else
-  echo Downloading server...
-  wget -q $url -O server/server.jar
+  echo "Downloading sever jar for the first time"
+
+  rm -rvf /mc/server/libraries
+  rm -rvf /mc/server/server.jar
+
+  if [ "$flavour" = "spigot" ]; then
+    echo Compiling spigot server from source, this may take a while...
+    tmp=$(mktemp -d)
+    cd $tmp
+
+    wget -q $url -O build_tools.jar
+    java -jar build_tools.jar --rev $version --compile SPIGOT
+
+    if [ -f spigot-*.jar ]; then
+      cp -v spigot-*.jar /mc/server/server.jar
+
+    else
+      echo Builds tools didnt produce a server jar, aborting...
+      exit
+    fi
+
+    cd /mc/
+    rm -rvf $tmp
+
+  elif [ "$flavour" = "forge" ]; then
+    echo Unpacking forge server jar and config, this may take a while...
+    tmp=$(mktemp -d)
+    cd $tmp
+
+    wget -q $url -O installer.jar
+    java -jar installer.jar --installServer
+
+    rm -vf /mc/server/server.jar
+    cp -rvf libraries/ /mc/server
+
+    cd /mc/
+    rm -rvf $tmp
+
+  else
+    echo Downloading server...
+    wget -q $url -O server/server.jar
+  fi
 fi
+
+echo $tag > server/tag.txt
 
 /bin/sh start.sh
