@@ -1,40 +1,52 @@
 #!/bin/sh
 
-# $1: minecraft flavour ("vanilla", "fabric", "forge")
-# $2: minecraft version ("1.19.3", ...)
-get_download_url() {
+# Inputs
+# $1: minecraft flavour ("vanilla", "fabric", "forge", "spigot")
+# $2: minecraft version ("1.19.3", "latest", ...)
+# Ouputs
+# url: download url
+# version: actual game version (i.e. latest would become 1.19.3)
+get_version_info() {
   case $1 in
     "spigot")
-      echo "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar";;
-
-    "vanilla")
       if [ "$2" = "latest" ]; then
-        version_=$(wget "https://launchermeta.mojang.com/mc/game/version_manifest.json" -O- | jq -r ".latest.release")
-        version="\"$version_\""
+        version=$(wget -q "https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/maven-metadata.xml" -O- | yq -pxml -r ".metadata.versioning.latest" | cut -d- -f1)
 
-      elif [ "$2" = "latest-snapshot" ]; then
-        version_=$(wget "https://launchermeta.mojang.com/mc/game/version_manifest.json" -O- | jq -r ".latest.snapshot")
-        version="\"$version_\""
-
-      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+\.[0-9]+"); then
-        version="\"$2\""
-      fi
-
-      version_meta_url=$(wget -q "https://launchermeta.mojang.com/mc/game/version_manifest.json" -O- | jq -r ".versions | map({id , url}) | .[] | select(.id == $version).url")
-      wget -q $version_meta_url -O- | jq -r ".downloads.server.url";;
-
-    "fabric")
-      if [ "$2" = "latest" ]; then
-        version=$(wget "https://meta.fabricmc.net/v2/versions" -O- | jq -r "[.game | .[] | select(.stable)][0].version")
-
-      elif [ "$2" = "latest-snapshot" ]; then
-        version=$(wget "https://meta.fabricmc.net/v2/versions" -O- | jq -r ".game[0].version")
-
-      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+\.[0-9]+"); then
+      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?"); then
         version=$2
       fi
 
-      echo "https://meta.fabricmc.net/v2/versions/loader/$version/0.14.14/0.11.1/server/jar";;
+      url="https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar";;
+
+    "vanilla")
+      if [ "$2" = "latest" ]; then
+        version=$(wget -q "https://launchermeta.mojang.com/mc/game/version_manifest.json" -O- | jq -r ".latest.release")
+        version_="\"$version\""
+
+      elif [ "$2" = "latest-snapshot" ]; then
+        version=$(wget -1 "https://launchermeta.mojang.com/mc/game/version_manifest.json" -O- | jq -r ".latest.snapshot")
+        version_="\"$version\""
+
+      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?"); then
+        version=$2
+        version_="\"$version_\""
+      fi
+
+      version_meta_url=$(wget -q "https://launchermeta.mojang.com/mc/game/version_manifest.json" -O- | jq -r ".versions | map({id , url}) | .[] | select(.id == $version_).url")
+      url=$(wget -q $version_meta_url -O- | jq -r ".downloads.server.url");;
+
+    "fabric")
+      if [ "$2" = "latest" ]; then
+        version=$(wget -q "https://meta.fabricmc.net/v2/versions" -O- | jq -r "[.game | .[] | select(.stable)][0].version")
+
+      elif [ "$2" = "latest-snapshot" ]; then
+        version=$(wget -q "https://meta.fabricmc.net/v2/versions" -O- | jq -r ".game[0].version")
+
+      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?"); then
+        version=$2
+      fi
+
+      url="https://meta.fabricmc.net/v2/versions/loader/$version/0.14.14/0.11.1/server/jar";;
 
     "forge")
       if [ "$2" = "latest-recommended" ]; then
@@ -44,21 +56,21 @@ get_download_url() {
 
       elif [ "$2" = "latest" ]; then
         full_version=$(wget -q "https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json" -O- | jq -r '.promos | to_entries | map(select(.key | match(".{6}-latest"))) | .[-1]')
-        version=$(echo $full_version | jq -r ".key" | cut -d- -f1)
+        version=$(echo $full_version | jq -r ".key" | cut -d- -f1)_
         forge_version=$(echo $full_version | jq -r ".value")
 
-      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+\.[0-9]+-latest"); then
+      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?-latest"); then
         version=$(echo $2 | cut -d- -f1)
         version_name="\"$version-latest\""
         forge_version=$(wget -q "https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json" -O- | jq -r ".promos.$version_name")
 
-      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+\.[0-9]+") || $(echo $2 | grep -Eq "[0-9]+\.[0-9]+\.[0-9]+-recommended"); then
+      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?") || $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?-recommended"); then
         version=$(echo $2 | cut -d- -f1)
         version_name="\"$version-recommended\""
         forge_version=$(wget -q "https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json" -O- | jq -r ".promos.$version_name")
       fi
 
-      echo "https://maven.minecraftforge.net/net/minecraftforge/forge/$version-$forge_version/forge-$version-$forge_version-installer.jar";;
+      url="https://maven.minecraftforge.net/net/minecraftforge/forge/$version-$forge_version/forge-$version-$forge_version-installer.jar";;
   esac
 }
 
@@ -78,22 +90,28 @@ fi
 
 if [ ! -z $CUSTOM_SERVER_URL ]; then
   url=$CUSTOM_SERVER_URL
+  version="custom"
+  flavour="custom"
   echo Using \"$CUSTOM_SERVER_URL\" as custom server url
 else
-  url=$(get_download_url $SERVER_TYPE $SERVER_VERSION)
+  get_version_info $SERVER_TYPE $SERVER_VERSION
+  flavour=$SERVER_TYPE
   echo Using \"$url\" as $SERVER_TYPE server url
 fi
+
+#echo "$url $version $flavour"
+#exit
 
 rm -rv /mc/server/libraries
 rm -rv /mc/server/server.jar
 
-if [ "$SERVER_TYPE" = "spigot" ]; then
+if [ "$flavour" = "spigot" ]; then
   echo Compiling spigot server from source, this may take a while...
   tmp=$(mktemp -d)
   cd $tmp
 
   wget -q $url -O build_tools.jar
-  java -jar build_tools.jar --rev $SERVER_VERSION --compile SPIGOT
+  java -jar build_tools.jar --rev $flavour --compile SPIGOT
 
   if [ -f spigot-*.jar ]; then
     cp -v spigot-*.jar /mc/server/server.jar
@@ -106,7 +124,7 @@ if [ "$SERVER_TYPE" = "spigot" ]; then
   cd /mc/
   rm -rv $tmp
 
-elif [ "$SERVER_TYPE" = "forge" ]; then
+elif [ "$flavour" = "forge" ]; then
   echo Unpacking forge server jar and config, this may take a while...
   tmp=$(mktemp -d)
   cd $tmp

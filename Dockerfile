@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jre-alpine
-RUN apk add jq git
+RUN apk add jq yq git
 
 VOLUME /mc/server
 WORKDIR /mc
