@@ -19,7 +19,7 @@
 #
 
 # Inputs
-# $1: minecraft flavour ("vanilla", "fabric", "forge", "spigot")
+# $1: minecraft flavour ("vanilla", "fabric", "forge", "spigot", "paper")
 # $2: minecraft version ("1.19.3", "latest", ...)
 # Ouputs
 # url: download url
@@ -53,6 +53,17 @@ get_version_info() {
       version_meta_url=$(wget -q "https://launchermeta.mojang.com/mc/game/version_manifest.json" -O- | jq -r ".versions | map({id , url}) | .[] | select(.id == $version_).url")
       url=$(wget -q $version_meta_url -O- | jq -r ".downloads.server.url");;
 
+    "paper")
+      if [ "$2" = "latest" ]; then
+        version=$(wget -q "https://api.papermc.io/v2/projects/paper/" -O- | jq -r ".versions | last")
+
+      elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?"); then
+        version=$2
+      fi
+
+      paper_version=$(wget -q "https://api.papermc.io/v2/projects/paper/versions/$version/" -O- | jq -r ".builds | last")
+      url="https://api.papermc.io/v2/projects/paper/versions/$version/builds/$paper_version/downloads/paper-$version-$paper_version.jar";;
+
     "fabric")
       if [ "$2" = "latest" ]; then
         version=$(wget -q "https://meta.fabricmc.net/v2/versions" -O- | jq -r "[.game | .[] | select(.stable)][0].version")
@@ -74,7 +85,7 @@ get_version_info() {
 
       elif [ "$2" = "latest" ]; then
         full_version=$(wget -q "https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json" -O- | jq -r '.promos | to_entries | map(select(.key | match(".{6}-latest"))) | .[-1]')
-        version=$(echo $full_version | jq -r ".key" | cut -d- -f1)_
+        version=$(echo $full_version | jq -r ".key" | cut -d- -f1)
         forge_version=$(echo $full_version | jq -r ".value")
 
       elif $(echo $2 | grep -Eq "[0-9]+\.[0-9]+(\.[0-9]+)?-latest"); then

@@ -3,7 +3,7 @@
 A simple docker image to run a minecraft server in a docker container.
 Downloads the desired minecraft version and flavour on startup and automatically launches it.
 You must mount `/mc/server` as a volume in your host machine to persist data across container launches.
-Supports both automatically downloading `vanilla`, `fabric`, `forge` and `spigot` server jars, and using a custom server url link.
+Supports both automatically downloading `vanilla`, `fabric`, `forge`, `spigot` and `paper` server jars, and using a custom server url link.
 
 
 ## Building the image
@@ -55,6 +55,9 @@ Currently used arguments:
   - __*__`spigot`:
     - `latest`: for latest published version
     - `<version_number>`: for a specific minecraft version
+  - __*__`paper`:
+    - `latest`: for latest published version
+    - `<version_number>`: for a specific minecraft version
   - __*__`forge`:
     - `latest`: for latest published forge version
     - `latest-recommended`: for latest recommended forge version
@@ -82,8 +85,6 @@ You may also choose to modify the image to expose port `25575` and connect to it
 
 
 # License
-
-If you package code derived from, or taken from this codebase, you must adhere to the following license:
 
 ```
 Docker Minecraft Server, a simple docker image to run a minecraft server.
