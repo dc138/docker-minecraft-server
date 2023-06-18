@@ -120,7 +120,6 @@ fi
 
 if [ ! -z $CUSTOM_SERVER_URL ]; then
   url=$CUSTOM_SERVER_URL
-  version="custom"
   flavour="custom"
 
   echo Using \"$CUSTOM_SERVER_URL\" as custom server url
