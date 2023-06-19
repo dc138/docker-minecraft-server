@@ -4,6 +4,7 @@ RUN apk add jq yq git
 VOLUME /mc/server
 WORKDIR /mc
 
+ENV JVM_FLAGS="-Xms512M -Xmx1024M"
 ENV KEEP_ALIVE="false"
 ENV SERVER_TYPE="vanilla"
 ENV SERVER_VERSION="latest"
