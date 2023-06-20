@@ -66,6 +66,7 @@ Currently used arguments:
 - `SERVER_CUSTOM_URL`: a custom URL to download the server from. Bypasses `SERVER_VERSION` if used. Remember to set `SERVER_VERSION` when using this option regardless, as it is used when invoking the server (use `vanilla` for a typical jar file).
 - `EULA`: `true` or `TRUE` to agree. Server will not start unless set.
 - `JVM_FLAGS`: custom arguments to the JVM.
+- `UID` and ' GID': run the server with a custom user and group.
 
 *Note: flavours marked with*
 _*_

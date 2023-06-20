@@ -184,9 +184,11 @@ fi
 cd /mc/server/
 echo $tag > tag.txt
 
+chown -R $UID:$GID .
+
 if [ "$flavour" = "forge" ]; then
-  exec java $JVM_FLAGS $(cat libraries/net/minecraftforge/forge/*/unix_args.txt)
+  exec setpriv --reuid $UID --regid $GID --clear-groups java $JVM_FLAGS $(cat libraries/net/minecraftforge/forge/*/unix_args.txt)
 
 else
-  exec java $JVM_FLAGS -jar server.jar nogui
+  exec setpriv --reuid $UID --regid $GID --clear-groups java $JVM_FLAGS -jar server.jar nogui
 fi
