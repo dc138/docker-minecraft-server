@@ -186,10 +186,10 @@ echo $tag > tag.txt
 
 while true; do
   if [ "$flavour" = "forge" ]; then
-    java $JVM_FLAGS $(cat libraries/net/minecraftforge/forge/*/unix_args.txt)
+    exec java $JVM_FLAGS $(cat libraries/net/minecraftforge/forge/*/unix_args.txt)
 
   else
-    java $JVM_FLAGS -jar server.jar nogui
+    exec java $JVM_FLAGS -jar server.jar nogui
   fi
 
   [ "$KEEP_ALIVE" = "true" ] || [ "$KEEP_ALIVE" = "TRUE" ] || break
