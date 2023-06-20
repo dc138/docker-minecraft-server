@@ -65,7 +65,6 @@ Currently used arguments:
     - `<version_number>-recommended` or `<version_number>`: latest recommended forge version for a certain minecraft version
 - `SERVER_CUSTOM_URL`: a custom URL to download the server from. Bypasses `SERVER_VERSION` if used. Remember to set `SERVER_VERSION` when using this option regardless, as it is used when invoking the server (use `vanilla` for a typical jar file).
 - `EULA`: `true` or `TRUE` to agree. Server will not start unless set.
-- `KEEP_ALIVE`: set to `true` to automatically reboot the server on a crash.
 - `JVM_FLAGS`: custom arguments to the JVM.
 
 *Note: flavours marked with*
