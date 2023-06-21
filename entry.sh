@@ -133,7 +133,7 @@ fi
 
 tag="$url $version $flavour"
 
-if [ -e server/tag.txt ] && [ -e server/server.jar ] && grep -q "$tag" server/tag.txt; then
+if [ -d server ] && [ -e server/tag.txt ] && [ \( -e server/server.jar \) -o \( "$SERVER_TYPE" = "forge" \) ] && [ "$tag" = "$(cat server/tag.txt)" ]; then
   echo "Using existing server"
 
 else
