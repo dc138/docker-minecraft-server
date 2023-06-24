@@ -75,7 +75,10 @@ get_version_info() {
         version=$2
       fi
 
-      url="https://meta.fabricmc.net/v2/versions/loader/$version/0.14.14/0.11.1/server/jar";;
+      loader_version=$(wget "https://meta.fabricmc.net/v2/versions/loader/" -O- | jq -r ".[0].version")
+      installer_version=$(wget "https://meta.fabricmc.net/v2/versions/installer/" -O- | jq -r ".[0].version")
+
+      url="https://meta.fabricmc.net/v2/versions/loader/$version/$loader_version/$installer_version/server/jar";;
 
     "forge")
       if [ "$2" = "latest-recommended" ]; then
