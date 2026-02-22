@@ -13,12 +13,12 @@ Note that you might need to change the java version used by the container to run
 ### From source
 
 ```bash
-git clone git@github.com:DarthChungo/docker-minecraft-server.git
+git clone git@github.com:dc138/docker-minecraft-server.git
 cd docker-minecraft-server
 ```
 
 ```bash
-docker build -t darthchungo/docker-minecraft-server:latest .
+docker build -t dc138/minecraft-server:latest .
 ```
 
 ### From docker hub
@@ -26,7 +26,7 @@ docker build -t darthchungo/docker-minecraft-server:latest .
 Alternatively, you can download a prebuilt image from docker hub:
 
 ```bash
-docker pull darthchungo/docker-minecraft-server:latest
+docker pull dc138/minecraft-server:latest
 ```
 
 
@@ -35,7 +35,7 @@ docker pull darthchungo/docker-minecraft-server:latest
 Now create a directory to store the server data, like `data/`, for example, and run the container:
 
 ```bash
-docker run -d -e "EULA=true" -p 25565:25565 -v $(pwd)/data:/mc/server darthchungo/docker-minecraft-server:latest
+docker run -d -e "EULA=true" -p 25565:25565 -v $(pwd)/data:/mc/server dc138/minecraft-server:latest
 ```
 
 The first time you run it, it will download the specified server jar automatically, and store its version and flavour inside a `tag.txt` file.
