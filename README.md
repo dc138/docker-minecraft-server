@@ -29,6 +29,7 @@ Alternatively, you can download a prebuilt image from docker hub:
 docker pull dc138/minecraft-server:latest
 ```
 
+Note that you may also download an image with a specific java runtime version by using any of the following tags: `jre-21`, `jre-17`, `jre-11`, `jre-8`, published on docker hub.
 
 ## Running the image
 
